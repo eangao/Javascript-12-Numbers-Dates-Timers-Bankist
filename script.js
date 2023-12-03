@@ -81,19 +81,38 @@ const inputClosePin = document.querySelector('.form__input--pin');
 /////////////////////////////////////////////////
 // Functions
 
-const displayMovements = function (movements, sort = false) {
+const displayMovements = function (acc, sort = false) {
   containerMovements.innerHTML = '';
 
-  const movs = sort ? movements.slice().sort((a, b) => a - b) : movements;
+  const movs = sort
+    ? acc.amovements.slice().sort((a, b) => a - b)
+    : acc.movements;
 
   movs.forEach(function (mov, i) {
     const type = mov > 0 ? 'deposit' : 'withdrawal';
+
+    //     And the same index is then gonna point
+    // to the equivalent date in this movements date array.
+    // All right, so this is a common technique
+    // of looping over to erase at the same time.
+    // So we called it for each method on one of them.
+    // So that's the movements.
+    // And then we use the current index
+    // to also get the data from some other array.
+    const date = new Date(acc.movementsDates[i]);
+
+    const day = `${date.getDate()}`.padStart(2, 0);
+    const month = `${date.getMonth() + 1}`.padStart(2, 0);
+    const year = date.getFullYear();
+
+    const displayDate = `${day}/${month}/${year}`;
 
     const html = `
       <div class="movements__row">
         <div class="movements__type movements__type--${type}">${
       i + 1
     } ${type}</div>
+        <div class="movements__date">${displayDate}</div>
         <div class="movements__value">${mov.toFixed(2)}€</div>
       </div>
     `;
@@ -142,7 +161,7 @@ createUsernames(accounts);
 
 const updateUI = function (acc) {
   // Display movements
-  displayMovements(acc.movements);
+  displayMovements(acc);
 
   // Display balance
   calcDisplayBalance(acc);
@@ -154,6 +173,11 @@ const updateUI = function (acc) {
 ///////////////////////////////////////
 // Event handlers
 let currentAccount;
+
+// FAKE ALWAYS LOGGED IN
+currentAccount = account1;
+updateUI(currentAccount);
+containerApp.style.opacity = 100;
 
 btnLogin.addEventListener('click', function (e) {
   // Prevent form from submitting
@@ -170,6 +194,16 @@ btnLogin.addEventListener('click', function (e) {
       currentAccount.owner.split(' ')[0]
     }`;
     containerApp.style.opacity = 100;
+
+    //create current date and time
+    const now = new Date();
+    const day = `${now.getDate()}`.padStart(2, 0);
+    const month = `${now.getMonth() + 1}`.padStart(2, 0);
+    const year = now.getFullYear();
+    const hour = `${now.getHours()}`.padStart(2, 0);
+    const min = `${now.getMinutes()}`.padStart(2, 0);
+    labelDate.textContent = `${day}/${month}/${year}, ${hour}:${min}`;
+    // day/month/year
 
     // Clear input fields
     inputLoginUsername.value = inputLoginPin.value = '';
@@ -198,6 +232,12 @@ btnTransfer.addEventListener('click', function (e) {
     currentAccount.movements.push(-amount);
     receiverAcc.movements.push(amount);
 
+    //add transfer date
+    //So JavaScript will then automatically convert this data here
+    // into a nicely formatted string.
+    currentAccount.movementsDates.push(new Date().toISOString());
+    receiverAcc.movementsDates.push(new Date().toISOString());
+
     // Update UI
     updateUI(currentAccount);
   }
@@ -211,6 +251,11 @@ btnLoan.addEventListener('click', function (e) {
   if (amount > 0 && currentAccount.movements.some(mov => mov >= amount * 0.1)) {
     // Add movement
     currentAccount.movements.push(amount);
+
+    //add loan date
+    //So JavaScript will then automatically convert this data here
+    // into a nicely formatted string.
+    currentAccount.movementsDates.push(new Date().toISOString());
 
     // Update UI
     updateUI(currentAccount);
@@ -932,207 +977,211 @@ btnSort.addEventListener('click', function (e) {
 // Creating Dates
 ////////////////////////////////////////////////////////////
 
-// When we built real world applications,
-// one type of data that comes up all the time
-// is dates and times.
-// So let's learn the fundamentals of dates and times
+// // When we built real world applications,
+// // one type of data that comes up all the time
+// // is dates and times.
+// // So let's learn the fundamentals of dates and times
 
-// Now dates and time can be a little bit messy
-// and confusing in JavaScript.
-// And so just like with numbers,
-// I will try to make the fundamentals here
-// as clear as possible.
+// // Now dates and time can be a little bit messy
+// // and confusing in JavaScript.
+// // And so just like with numbers,
+// // I will try to make the fundamentals here
+// // as clear as possible.
 
-// So create a date, and there are exactly four ways
-// of creating dates in JavaScript.
-// I mean, they all use the new date constructor function,
-// but they can accept differ
+// // So create a date, and there are exactly four ways
+// // of creating dates in JavaScript.
+// // I mean, they all use the new date constructor function,
+// // but they can accept differ
 
-//create a date\
-// 1
-const now = new Date();
-console.log(now);
+// //create a date\
+// // 1
+// const now = new Date();
+// console.log(now);
 
-//2
-// Next up the second way is to parse the date
-// from a date string.
-console.log(new Date('Dec 03 2023 13:20:45'));
+// //2
+// // Next up the second way is to parse the date
+// // from a date string.
+// console.log(new Date('Dec 03 2023 13:20:45'));
 
-// And so indeed that works
-// and we even get the day of the week here.
-// So JavaScript is pretty smart in parsing out the string
-// that we write here.
-// Now however, it's generally not a good idea
-// to do this because it can be quite unreliable, now right?
-console.log(new Date('December 24, 2015'));
+// // And so indeed that works
+// // and we even get the day of the week here.
+// // So JavaScript is pretty smart in parsing out the string
+// // that we write here.
+// // Now however, it's generally not a good idea
+// // to do this because it can be quite unreliable, now right?
+// console.log(new Date('December 24, 2015'));
 
-// However, if the string was actually created
-// by JavaScript itself, then of course it is pretty safe.
+// // However, if the string was actually created
+// // by JavaScript itself, then of course it is pretty safe.
 
-// So again, this is okay because it was JavaScript
-// who created that date that I just showed you there.
-console.log(new Date(account1.movementsDates[0]));
+// // So again, this is okay because it was JavaScript
+// // who created that date that I just showed you there.
+// console.log(new Date(account1.movementsDates[0]));
 
-// So this date here, and by the way,
-// this Z here means the UTC.
-// So that's the Coordinated Universal Time,
-// which is basically the time without any time zone in London
-// and also without daylight savings.
+// // So this date here, and by the way,
+// // this Z here means the UTC.
+// // So that's the Coordinated Universal Time,
+// // which is basically the time without any time zone in London
+// // and also without daylight savings.
 
-// 3
+// // 3
 
-// So that's based on a string, but we can also pass in year,
-// month, day, hour, minute,
-// hence even second into this constructor.
-console.log(new Date(2037, 10, 19, 15, 23, 5));
+// // So that's based on a string, but we can also pass in year,
+// // month, day, hour, minute,
+// // hence even second into this constructor.
+// console.log(new Date(2037, 10, 19, 15, 23, 5));
 
-// So indeed we get November 19, 2037 at 15 hours, 23 minutes,
-// five seconds just as we have here.
-// Now, you might've noticed that here we have 10,
-// but November is actually the month 11, right?
-// And so that means that the month here
-// in JavaScript is zero based.
-// And that's a little bit weird, but well,
-// we can just get used to that, right.
+// // So indeed we get November 19, 2037 at 15 hours, 23 minutes,
+// // five seconds just as we have here.
+// // Now, you might've noticed that here we have 10,
+// // but November is actually the month 11, right?
+// // And so that means that the month here
+// // in JavaScript is zero based.
+// // And that's a little bit weird, but well,
+// // we can just get used to that, right.
 
-console.log(new Date(2037, 10, 31));
-// Now, what's cool about this
-// is that JavaScript actually autocorrects the day.
-// So let's try this here again differently.
-// So let's try November 31st,
-// but we know that November only has 30 days, right?
-// And so if we take a look at this,
-// it will then autocorrect right to the next day.
-// So that's going to be December 1st
-// and we can even try November 33rd,
-// which should then be a December 3rd, okay.
-// So this sometimes is actually pretty useful.
+// console.log(new Date(2037, 10, 31));
+// // Now, what's cool about this
+// // is that JavaScript actually autocorrects the day.
+// // So let's try this here again differently.
+// // So let's try November 31st,
+// // but we know that November only has 30 days, right?
+// // And so if we take a look at this,
+// // it will then autocorrect right to the next day.
+// // So that's going to be December 1st
+// // and we can even try November 33rd,
+// // which should then be a December 3rd, okay.
+// // So this sometimes is actually pretty useful.
 
-//4
+// //4
 
-// finally, we can also
-// pass into the date constructor function,
-// the amount of milliseconds passed since the beginning
-// of the Unix time, which is January 1, 1970,
-// So again, new date and if we pass in zero,
-// so zero milliseconds after that initial Unix time,
-// then indeed we get January 1st, 1970.
-// Okay, and this will actually be pretty useful,
-// even though it looks a bit strange.
-console.log(new Date(0));
+// // finally, we can also
+// // pass into the date constructor function,
+// // the amount of milliseconds passed since the beginning
+// // of the Unix time, which is January 1, 1970,
+// // So again, new date and if we pass in zero,
+// // so zero milliseconds after that initial Unix time,
+// // then indeed we get January 1st, 1970.
+// // Okay, and this will actually be pretty useful,
+// // even though it looks a bit strange.
+// console.log(new Date(0));
 
-// And let's now create a date that is three days after this.
-console.log(new Date(3 * 24 * 60 * 60 * 1000));
+// // And let's now create a date that is three days after this.
+// console.log(new Date(3 * 24 * 60 * 60 * 1000));
 
-// And so that is essentially three times, which is three days.
-// And one day is made out of 24 hours,
-// which is made out of 60 minutes,
-// which is made out of 60 minutes,
-// which is made out of 1000 milliseconds.
-// And so this is how we convert from days to milliseconds.
-// So three days times 24 hours,
-// which is the number of hours in one day, times 60,
-// which is the number of minutes in one hour, then times 60,
-// which is the number of seconds in one minute,
-// and then times 1000 to convert two milliseconds.
-// And so now we get January 4th,
-// so that's exactly three days later.
+// // And so that is essentially three times, which is three days.
+// // And one day is made out of 24 hours,
+// // which is made out of 60 minutes,
+// // which is made out of 60 minutes,
+// // which is made out of 1000 milliseconds.
+// // And so this is how we convert from days to milliseconds.
+// // So three days times 24 hours,
+// // which is the number of hours in one day, times 60,
+// // which is the number of minutes in one hour, then times 60,
+// // which is the number of seconds in one minute,
+// // and then times 1000 to convert two milliseconds.
+// // And so now we get January 4th,
+// // so that's exactly three days later.
 
-// Now these dates that we just created here are in fact,
-// just another special type of object.
-// And so therefore they have their own methods,
-// just like a race or maps or strings.
-// And so we can use these methods to get,
-// or to set components of a date, all right.
+// // Now these dates that we just created here are in fact,
+// // just another special type of object.
+// // And so therefore they have their own methods,
+// // just like a race or maps or strings.
+// // And so we can use these methods to get,
+// // or to set components of a date, all right.
 
-//working with dates
-const future = new Date(2037, 10, 19, 15, 23);
-console.log(future);
-console.log(future.getFullYear());
-// and then the method get full year.
-// And so indeed we get 2037.
-// There's also get year, but never use that.
-// Okay, always use get full year.
-// Don't make the mistake of using that other one.
+// //working with dates
+// const future = new Date(2037, 10, 19, 15, 23);
+// console.log(future);
+// console.log(future.getFullYear());
+// // and then the method get full year.
+// // And so indeed we get 2037.
+// // There's also get year, but never use that.
+// // Okay, always use get full year.
+// // Don't make the mistake of using that other one.
 
-// And remember that this one is zero based.
-// So 10 is actually the month number 11,
-console.log(future.getMonth());
+// // And remember that this one is zero based.
+// // So 10 is actually the month number 11,
+// console.log(future.getMonth());
 
-// then we have get date.
-// And this is actually the day.
-console.log(future.getDate());
+// // then we have get date.
+// // And this is actually the day.
+// console.log(future.getDate());
 
-// So I think that this method has a little bit of a weird name
-// and that's because get day
-// is actually not the day of the month,
-// but the day of the week, okay.
+// // So I think that this method has a little bit of a weird name
+// // and that's because get day
+// // is actually not the day of the month,
+// // but the day of the week, okay.
 
-// And zero here is Sunday and so four is Thursday.
-// So we saw already that it's Thursday.
-// And so that's equivalent to number four.
-console.log(future.getDay());
+// // And zero here is Sunday and so four is Thursday.
+// // So we saw already that it's Thursday.
+// // And so that's equivalent to number four.
+// console.log(future.getDay());
 
-console.log(future.getHours());
-console.log(future.getMinutes());
-console.log(future.getSeconds());
+// console.log(future.getHours());
+// console.log(future.getMinutes());
+// console.log(future.getSeconds());
 
-console.log(future.toISOString());
-// Besides that we can also get a nicely formatted string.
-// So basically similar to what we have up here to ISO string.
-// All right.
-// So this is the ISO string,
-// which follows some kind of international standard.
-// And maybe you notice that this is actually similar
-// to the string that we used before coming from account one.
-// So that's movement dates, right?
+// console.log(future.toISOString());
+// // Besides that we can also get a nicely formatted string.
+// // So basically similar to what we have up here to ISO string.
+// // All right.
+// // So this is the ISO string,
+// // which follows some kind of international standard.
+// // And maybe you notice that this is actually similar
+// // to the string that we used before coming from account one.
+// // So that's movement dates, right?
 
-// So these were generated by exactly this method.
-// And so that's one of the very useful cases is when you want
-// to convert a particular date object into a string
-// that you can then store somewhere.
+// // So these were generated by exactly this method.
+// // And so that's one of the very useful cases is when you want
+// // to convert a particular date object into a string
+// // that you can then store somewhere.
 
-//===========
-// timestamp
-// Finally, we can also get the timestamp for the date.
-// And remember that the timestamp is the milliseconds,
-// which have passed since January 1, 1970, so get time.
-console.log(future.getTime()); //result 2142228180000
-console.log(new Date(2142228180000));
+// //===========
+// // timestamp
+// // Finally, we can also get the timestamp for the date.
+// // And remember that the timestamp is the milliseconds,
+// // which have passed since January 1, 1970, so get time.
+// console.log(future.getTime()); //result 2142228180000
+// console.log(new Date(2142228180000));
 
-// And timestamps are actually so important
-// that there is a special method that we can use
-// to get the timestamp for right now.
-// So if you want simply the current timestamp
-// for this exact moment, then you don't even need
-// to create a new date.
-// All we have to do is to call date.now,
-// and that then gives us this timestamp.
-// Now, okay.
-console.log(Date.now());
+// // And timestamps are actually so important
+// // that there is a special method that we can use
+// // to get the timestamp for right now.
+// // So if you want simply the current timestamp
+// // for this exact moment, then you don't even need
+// // to create a new date.
+// // All we have to do is to call date.now,
+// // and that then gives us this timestamp.
+// // Now, okay.
+// console.log(Date.now());
 
-// Finally, there are also the set versions
-// of all of these methods.
-future.setFullYear(2040);
-console.log(future);
+// // Finally, there are also the set versions
+// // of all of these methods.
+// future.setFullYear(2040);
+// console.log(future);
 
-// Finally, there are also the set versions
-// of all of these methods.
+// // Finally, there are also the set versions
+// // of all of these methods.
 
-// So let me just show you the one for the year.
+// // So let me just show you the one for the year.
 
-// And so future.setfullyear, and this again is a method.
-// So let's set it to 2040,
-// and then we can take a look at our date.
-// And so now it is November 19, 2040.
-// And of course, then the day of the month here has changed.
-// And so yeah, there also exists set month, set date,
-// set day and so on and so forth.
-// And these also perform autocorrection just like here,
-// when we create a new date, okay.
+// // And so future.setfullyear, and this again is a method.
+// // So let's set it to 2040,
+// // and then we can take a look at our date.
+// // And so now it is November 19, 2040.
+// // And of course, then the day of the month here has changed.
+// // And so yeah, there also exists set month, set date,
+// // set day and so on and so forth.
+// // And these also perform autocorrection just like here,
+// // when we create a new date, okay.
 
-// So that's basically all the methods that you need
-// to know about dates and these last here
-// are all quite intuitive and all you need to know really
-// is that there are all these different ways
-// of creating dates.
+// // So that's basically all the methods that you need
+// // to know about dates and these last here
+// // are all quite intuitive and all you need to know really
+// // is that there are all these different ways
+// // of creating dates.
+
+////////////////////////////////////////////////////////////////////
+// Adding Dates to "Bankist" App
+////////////////////////////////////////////////////////////////////
