@@ -596,106 +596,334 @@ btnSort.addEventListener('click', function (e) {
 // Numeric Separators
 //////////////////////////////////////////////////////////////////
 
-// Starting from year's 2021.
-// We can use a feature called "Numeric Separators"
-// to format numbers in a way
-// that is easier for us,
-// or for other developers to read and to understand.
+// // Starting from year's 2021.
+// // We can use a feature called "Numeric Separators"
+// // to format numbers in a way
+// // that is easier for us,
+// // or for other developers to read and to understand.
 
-// Let's say that we wanted to represent
-// a really large number.
-// For example, the diameter of our solar system.
-// Let's say a diameter,
-// which is 287,460,000,000.
-// And just from looking at this number here,
-// it's really difficult to read and to understand it.
-// Does this mean like 28 billion or is it just 2 billion
-// or really what is this number?
-// It's really hard to read like this.
-// There is just too many zeros here.
-// Now to help with this,
-// when we write a number this large
-// under normal English language,
-// we usually use a thousand separator like the comma.
-// We would write this number like this.
-// And then it becomes really easy
-// to immediately see that this means 287,460,000,000.
+// // Let's say that we wanted to represent
+// // a really large number.
+// // For example, the diameter of our solar system.
+// // Let's say a diameter,
+// // which is 287,460,000,000.
+// // And just from looking at this number here,
+// // it's really difficult to read and to understand it.
+// // Does this mean like 28 billion or is it just 2 billion
+// // or really what is this number?
+// // It's really hard to read like this.
+// // There is just too many zeros here.
+// // Now to help with this,
+// // when we write a number this large
+// // under normal English language,
+// // we usually use a thousand separator like the comma.
+// // We would write this number like this.
+// // And then it becomes really easy
+// // to immediately see that this means 287,460,000,000.
 
-// And now, fortunately,
-// we can do the same thing in JavaScript as well,
-// using the new numeric separators.
+// // And now, fortunately,
+// // we can do the same thing in JavaScript as well,
+// // using the new numeric separators.
 
-// 287, 460, 000, 000
-const diameter = 287_460_000_000;
+// // 287, 460, 000, 000
+// const diameter = 287_460_000_000;
 
-// Numeric separators are simply underscores
-// that we can place anywhere that we want in
-// or numbers,
-// and which will make it really easy to understand
-// and to parse numbers this large.
-// Using the underscore here as a thousand separator,
-// then makes it really easy to understand,
-// that this number here
-// means in fact, 287 billion.
+// // Numeric separators are simply underscores
+// // that we can place anywhere that we want in
+// // or numbers,
+// // and which will make it really easy to understand
+// // and to parse numbers this large.
+// // Using the underscore here as a thousand separator,
+// // then makes it really easy to understand,
+// // that this number here
+// // means in fact, 287 billion.
 
-// Now let's just log it to the console
-// to see what JavaScript actually sees.
-// And so here we see that in fact,
-// the engine basically ignores these underscores.
-// So these numeric separators.
-// It simply sees the number itself.
-// And so what this means,
-// is that we can actually place the underscores,
-// the numeric separators, anywhere that we want.
-console.log(diameter);
+// // Now let's just log it to the console
+// // to see what JavaScript actually sees.
+// // And so here we see that in fact,
+// // the engine basically ignores these underscores.
+// // So these numeric separators.
+// // It simply sees the number itself.
+// // And so what this means,
+// // is that we can actually place the underscores,
+// // the numeric separators, anywhere that we want.
+// console.log(diameter);
 
-const price = 345_99;
-console.log(price);
+// const price = 345_99;
+// console.log(price);
 
-const transferFee1 = 15_00;
-const transferFee2 = 1_500;
+// const transferFee1 = 15_00;
+// const transferFee2 = 1_500;
 
-// And this one is to show you some restrictions
-// as to where we can place the underscore.
-// PI is,
-// 3.1415,
-// and we can only place underscores between numbers.
+// // And this one is to show you some restrictions
+// // as to where we can place the underscore.
+// // PI is,
+// // 3.1415,
+// // and we can only place underscores between numbers.
 
-const PI = 3.1415;
-console.log(PI);
+// const PI = 3.1415;
+// console.log(PI);
 
-// And now just one final detail that we need to be aware of
-// is that when we try to convert strings,
-// that contain underscores,
-// to a number that will not work as expected.
+// // And now just one final detail that we need to be aware of
+// // is that when we try to convert strings,
+// // that contain underscores,
+// // to a number that will not work as expected.
 
-console.log(Number('230000'));
+// console.log(Number('230000'));
 
-// However, if we place an underscore here,
-// so if we want to have a numeric separator here,
-// that would not work.
-// Now it is not a number.
-// What that means,
-// is that you should really only use,
-// these numeric separators,
-// when you are writing down numbers like this.
+// // However, if we place an underscore here,
+// // so if we want to have a numeric separator here,
+// // that would not work.
+// // Now it is not a number.
+// // What that means,
+// // is that you should really only use,
+// // these numeric separators,
+// // when you are writing down numbers like this.
 
-// Really in the code.
-console.log(Number('230_000'));
+// // Really in the code.
+// console.log(Number('230_000'));
 
-// f you need to store a number in a string,
-// for example, in an API,
-// or if you get a number as a string from an API,
-// you should not use underscores in there,
-// because then JavaScript will not be able
-// to parse the number correctly out of that string.
-// It's not gonna work as expected
-// and you will get it's not a number,
-// that might then introduce bugs into your application.
+// // f you need to store a number in a string,
+// // for example, in an API,
+// // or if you get a number as a string from an API,
+// // you should not use underscores in there,
+// // because then JavaScript will not be able
+// // to parse the number correctly out of that string.
+// // It's not gonna work as expected
+// // and you will get it's not a number,
+// // that might then introduce bugs into your application.
 
-console.log(parseInt('230_000'));
-// And the same is true with the "parseInt" function.
-// Here we do not get not a number,
-// but we only get to 230.
-// Only the parts that is here in front of the underscore.
-// Everything else will then be ignored.
+// console.log(parseInt('230_000'));
+// // And the same is true with the "parseInt" function.
+// // Here we do not get not a number,
+// // but we only get to 230.
+// // Only the parts that is here in front of the underscore.
+// // Everything else will then be ignored.
+
+////////////////////////////////////////////////////////////////////
+// Working with BigInt
+////////////////////////////////////////////////////////////////////
+
+// Let's now meet one of the primitive data types,
+// that we never talked about before
+// and that is BigInt.
+// So big and is a special type of integers
+// that was introduced in year 2020
+// and so let's quickly take a look at it.
+// So we learned in the first lecture of the section
+// that numbers are represented internally as 64 bits.
+// And that means that there are exactly 64 ones or zeros
+// to represent any given number.
+// Now of these 64 bits only 53 are used
+// to actually store the digits themselves.
+// The rest are for storing the position
+// of the decimal point and the sign.
+// Now, if there are only 53 bits to store the number,
+// that means that there is a limit
+// of how big numbers can be,
+// and we can calculate that number.
+// So that's two elevated to 53
+// and then minus one, because the numbers starts at zero.
+// And so that is this gigantic number right here.
+// And so this is essentially the biggest number
+// that JavaScript can safely represent, okay.
+// Or actually is 53.
+// So this is the biggest number, alright.
+// And it is two,
+// because again we are working with base two,
+
+console.log(2 ** 53 - 1);
+
+// So any integer that is larger than this, is not safe
+// and that means it cannot be
+console.log(Number.MAX_SAFE_INTEGER);
+
+// It only added one number
+// to this one where it should have been added two.
+// So if we do this, then we get the exact same thing.
+// So we keep adding numbers here
+// and they are always the same.
+// And so that means that JavaScript can
+// simply not represent these numbers accurately.
+// And so if we do calculations with numbers
+// that are bigger than this,
+// then we might lose precision, okay.
+
+// So in some numbers it does actually work
+// for some reason, but that's because JavaScript
+// behind the scenes uses some tricks
+// to still represent some of the unsafe numbers.
+// But again, sometimes that works,
+// sometimes it doesn't.
+// And so that's why we call these unsafe numbers.
+// So you'll see sometimes these numbers are
+// or at least look correct.
+// And sometimes they don't, okay.
+console.log(2 ** 53 + 1);
+console.log(2 ** 53 + 2);
+console.log(2 ** 53 + 3);
+console.log(2 ** 53 + 4);
+
+// So, this can be a problem sometimes
+// because in some situations
+// we might need really, really big numbers.
+// Way bigger than this one here
+// for example, for database IDs
+// or when interacting with real 60 bit numbers
+// and these numbers are actually used in other languages.
+// And so we might, for example
+// from some API, get a number that is larger than this.
+// And then we have no way
+// of storing that in JavaScript,
+
+//===========
+// at least not until now,
+// because now starting from IES 2020
+// a new primitive was added,
+// which is called BigInt.
+
+// Now right? And BigInt stands for big integer.
+// And it can be used to store numbers as large as we want.
+// So no matter how big, all right.
+// So let's say we need this number
+// and I'm just using random numbers here.
+// So if I lock this,
+// then you'll see well this here
+// which probably does not have precision
+// because of course it's larger than this,
+// but if I use the n, then this will be a BigInt.
+// So let's see that.
+console.log(48796456465465789879786213132513646798764346987897);
+
+// but if I use the n, then this will be a BigInt.
+// So let's see that.
+// And so this n here basically transforms a regular number,
+// into a BigInt number.
+// And you see in the console here,
+// it then also does look different. Okay?
+console.log(48796456465465789879786213132513646798764346987897n);
+
+// We can also create BigInt by using the BigInt function.
+// So sometimes that's necessary
+// and then without the n.
+// And so this gives us kind of the same result,
+// while not really, for some reason,
+// but I guess it is because JavaScript will first have
+// to still represent this number here internally,
+// before it can then transform it into a BigInt.
+// And that's the reason why here
+// from a certain point on this second number is different.
+console.log(BigInt(48796456465465789879786213132513646798764346987897));
+
+// So this constructor function should probably only be used
+// with small numbers,
+// for example, like this.
+// Now, okay.
+console.log(BigInt(48796));
+
+// Operations
+
+// And well, basically it's very simple.
+// All the usual operators still work the same.
+console.log(10000n + 10000n);
+console.log(1000045646461498797987987946464679876945646n * 5486456465646546n);
+
+// Now what is not possible is
+// to mix BigInt with regular numbers.
+const huge = 526465465465465134646465n;
+const num = 23;
+
+// cannot mix BigInt and other types.
+// console.log(huge * num);
+
+// And this is where the constructor function
+console.log(huge * BigInt(num));
+
+// However, there are two exceptions to this
+// which are the comparison operators
+// and the plus operator when working with strings.
+
+// So let's see that.
+// So we can still do a BigInt,
+// and then for example, a greater than a normal number.
+// So this still works
+// and we still get true as expected, okay.
+
+//Exceptions
+console.log(20n > 15);
+
+// However, when we do this
+// so 20n equal, equal, equal 20,
+// we will get false.
+// But that makes sense
+// because JavaScript when we use the triple operator
+// does not do type coercion.
+// And in fact,these two values here,
+
+// they have a different primitive type.
+// This is a regular number, and this is a BigInt.
+// In fact, we can check that,
+// Or at least I think we can,
+// I never did this actually.
+// But yeah, indeed the type of this is a BigInt,
+// All right.
+
+console.log(20n === 20);
+console.log(typeof 20n);
+
+// But however, if we do the regular equality operator,
+// so the lose one,
+// then this should still be true.
+// Right. Because then JavaScript does the type coercion.
+// And so then it will coerce this one to a regular number,
+// and then they're both the same.
+
+console.log(20n == 20);
+
+// And so then it will coerce this one to a regular number,
+// and then they're both the same.
+// So just like, so it would even work like this.
+console.log(20n == '20');
+
+//String exception
+// And the other exception is when
+// we do string concatenations.
+
+// And so you'll see in this case,
+// the number isn't actually converted to a string.
+// So even the BigInt number, okay.
+console.log(huge + ' is REALLY big!!!');
+
+// Now, one other thing that I didn't tell you up here is
+// that also the math operations that we talked
+// about earlier are not gonna work here.
+// So that doesn't work.
+// console.log(Math.sqrt(16n));
+
+//Division exception
+
+// this would not be an integer, right?
+// So 10 divided by three is 3.33 until infinity.
+// So here, but with BigInt,
+// it will simply then return the closest BigInt. Right?
+// Let's try it with 11 here,
+// and so it simply basically cuts the decimal part off,
+// of course with 12, it would then be four, right.
+// But with anything else,
+// it will then cut off the decimal part, okay.
+console.log(10n / 3n);
+console.log(11n / 3n);
+console.log(12n / 3n);
+console.log(10 / 3);
+
+// And basically, this is all that I have to tell you
+// in an introduction video like this one about BigInt.
+// So this new primitive type
+// adds some new capabilities
+// to the JavaScript language.
+// When you really need to work with like huge numbers
+// just like this one here, for example.
+
+// Now in practice, you will probably not use this very much
+// but it's still good to know that BigInt exists
+// and also how it works.
