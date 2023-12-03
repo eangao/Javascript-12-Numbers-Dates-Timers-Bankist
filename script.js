@@ -20,10 +20,10 @@ const account1 = {
     '2019-12-23T07:42:02.383Z',
     '2020-01-28T09:15:04.904Z',
     '2020-04-01T10:17:24.185Z',
-    '2020-05-08T14:11:59.604Z',
-    '2020-05-27T17:01:17.194Z',
-    '2020-07-11T23:36:17.929Z',
-    '2020-07-12T10:51:36.790Z',
+    '2023-11-26T14:11:59.604Z',
+    '2023-12-01T17:01:17.194Z',
+    '2023-12-02T17:01:17.194Z',
+    '2023-12-03T17:01:17.194Z',
   ],
   currency: 'EUR',
   locale: 'pt-PT', // de-DE
@@ -43,7 +43,7 @@ const account2 = {
     '2020-02-05T16:33:06.386Z',
     '2020-04-10T14:43:26.374Z',
     '2020-06-25T18:49:59.371Z',
-    '2020-07-26T12:01:20.894Z',
+    '2023-12-02T12:01:20.894Z',
   ],
   currency: 'USD',
   locale: 'en-US',
@@ -81,11 +81,28 @@ const inputClosePin = document.querySelector('.form__input--pin');
 /////////////////////////////////////////////////
 // Functions
 
+const formatMovementDate = function (date) {
+  const calcDaysPassed = (date1, date2) =>
+    Math.round(Math.abs(date2 - date1) / (1000 * 60 * 60 * 24));
+
+  const daysPassed = calcDaysPassed(new Date(), date);
+  console.log(daysPassed);
+
+  if (daysPassed === 0) return 'Today';
+  if (daysPassed === 1) return 'Yesterday';
+  if (daysPassed <= 7) return `${daysPassed} days ago`;
+
+  const day = `${date.getDate()}`.padStart(2, 0);
+  const month = `${date.getMonth() + 1}`.padStart(2, 0);
+  const year = date.getFullYear();
+  return `${day}/${month}/${year}`;
+};
+
 const displayMovements = function (acc, sort = false) {
   containerMovements.innerHTML = '';
 
   const movs = sort
-    ? acc.amovements.slice().sort((a, b) => a - b)
+    ? acc.movements.slice().sort((a, b) => a - b)
     : acc.movements;
 
   movs.forEach(function (mov, i) {
@@ -101,11 +118,7 @@ const displayMovements = function (acc, sort = false) {
     // to also get the data from some other array.
     const date = new Date(acc.movementsDates[i]);
 
-    const day = `${date.getDate()}`.padStart(2, 0);
-    const month = `${date.getMonth() + 1}`.padStart(2, 0);
-    const year = date.getFullYear();
-
-    const displayDate = `${day}/${month}/${year}`;
+    const displayDate = formatMovementDate(date);
 
     const html = `
       <div class="movements__row">
@@ -174,10 +187,10 @@ const updateUI = function (acc) {
 // Event handlers
 let currentAccount;
 
-// FAKE ALWAYS LOGGED IN
-currentAccount = account1;
-updateUI(currentAccount);
-containerApp.style.opacity = 100;
+// // FAKE ALWAYS LOGGED IN
+// currentAccount = account1;
+// updateUI(currentAccount);
+// containerApp.style.opacity = 100;
 
 btnLogin.addEventListener('click', function (e) {
   // Prevent form from submitting
@@ -289,7 +302,7 @@ btnClose.addEventListener('click', function (e) {
 let sorted = false;
 btnSort.addEventListener('click', function (e) {
   e.preventDefault();
-  displayMovements(currentAccount.movements, !sorted);
+  displayMovements(currentAccount, !sorted);
   sorted = !sorted;
 });
 
@@ -1185,3 +1198,79 @@ btnSort.addEventListener('click', function (e) {
 ////////////////////////////////////////////////////////////////////
 // Adding Dates to "Bankist" App
 ////////////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////////
+// Operations With Dates
+//////////////////////////////////////////////////////////////////
+
+// Let's now perform some operations with dates.
+// So one cool thing that we can do with dates
+// is to do calculations with them.
+
+// For example, we can subtract one date
+// from another date,
+// in order to calculate how many days have passed
+// between the two dates.
+
+// And this works,
+// because whenever we attempt to convert a date
+// to a number, then the result is going to be the
+// timestamp in milliseconds.
+// And with these milliseconds,
+// we can then perform calculations.
+// So again, the timestamps are going to be really helpful here
+// in this situation.
+
+const future = new Date(2037, 10, 19, 15, 23);
+console.log(future);
+console.log(+future);
+
+// o if we subtract one date from another,
+// the result is going to be a number like this.
+// So a timestamp in milliseconds.
+// And then we can simply convert
+// these milliseconds back to Days,
+// or two hours,
+// or to whatever we really want.
+// So let's actually now create a
+
+const calcDaysPassed = (date1, date2) =>
+  Math.abs((date2 - date1) / (1000 * 60 * 60 * 24));
+
+// Alright, and so this gives us these milliseconds.
+// And so now we just need to convert them.
+// And this is similar to what we did,
+// I think in one of the previous lectures.
+// So we want to divide by 1000.
+// And so this converts milliseconds to seconds,
+// then that times 60,
+// to convert it to minutes,
+// then times 60 to convert it to hours,
+// and then times 24,
+// which converts it to days.
+// And again, that's because there are 24 hours in a day.
+// There are 60 minutes in one hour,
+// 60 seconds in one minute,
+// and 1000 milliseconds in one second.
+// And so now we get 10 days.
+// And that makes sense.
+
+const days1 = calcDaysPassed(new Date(2037, 3, 14), new Date(2037, 3, 4));
+console.log(days1);
+
+// So this works just really nice.
+// Now if you need really pretty sighs calculations,
+// for example, including time changes due
+// to daylight saving changes,
+// and other weird edge cases like that,
+// then you should use a date library like moment dot js.
+// And that's a library
+// that's available for free for all JavaScript developers.
+
+// So we might not want that.
+// And in this case,
+// we can simply use math dot round on all of this.
+// const days1 = calcDaysPassed(
+//   new Date(2037, 3, 14, 8, 6),
+//   new Date(2037, 3, 4, 10, 3)
+// );
