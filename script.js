@@ -567,27 +567,135 @@ btnSort.addEventListener('click', function (e) {
 // The Remainder Operator
 //////////////////////////////////////////////////////////////
 
-console.log(5 % 2);
-console.log(5 / 2); //5  = 2 * 2 + 1
+// console.log(5 % 2);
+// console.log(5 / 2); //5  = 2 * 2 + 1
 
-console.log(8 % 3);
-console.log(8 / 3); //8  = 2 * 3 + 2
+// console.log(8 % 3);
+// console.log(8 / 3); //8  = 2 * 3 + 2
 
-//reminder
-console.log(6 % 2);
-console.log(6 / 2);
+// //reminder
+// console.log(6 % 2);
+// console.log(6 / 2);
 
-const isEven = n => n % 2 === 0;
-console.log(isEven(8));
-console.log(isEven(23));
-console.log(isEven(514));
+// const isEven = n => n % 2 === 0;
+// console.log(isEven(8));
+// console.log(isEven(23));
+// console.log(isEven(514));
 
-labelBalance.addEventListener('click', function () {
-  [...document.querySelectorAll('.movements__row')].forEach(function (row, i) {
-    //every 2nd row
-    if (i % 2 === 0) row.style.backgroundColor = 'orangered';
+// labelBalance.addEventListener('click', function () {
+//   [...document.querySelectorAll('.movements__row')].forEach(function (row, i) {
+//     //every 2nd row
+//     if (i % 2 === 0) row.style.backgroundColor = 'orangered';
 
-    //every 3rd row
-    if (i % 3 === 0) row.style.backgroundColor = 'blue';
-  });
-});
+//     //every 3rd row
+//     if (i % 3 === 0) row.style.backgroundColor = 'blue';
+//   });
+// });
+
+//////////////////////////////////////////////////////////////////
+// Numeric Separators
+//////////////////////////////////////////////////////////////////
+
+// Starting from year's 2021.
+// We can use a feature called "Numeric Separators"
+// to format numbers in a way
+// that is easier for us,
+// or for other developers to read and to understand.
+
+// Let's say that we wanted to represent
+// a really large number.
+// For example, the diameter of our solar system.
+// Let's say a diameter,
+// which is 287,460,000,000.
+// And just from looking at this number here,
+// it's really difficult to read and to understand it.
+// Does this mean like 28 billion or is it just 2 billion
+// or really what is this number?
+// It's really hard to read like this.
+// There is just too many zeros here.
+// Now to help with this,
+// when we write a number this large
+// under normal English language,
+// we usually use a thousand separator like the comma.
+// We would write this number like this.
+// And then it becomes really easy
+// to immediately see that this means 287,460,000,000.
+
+// And now, fortunately,
+// we can do the same thing in JavaScript as well,
+// using the new numeric separators.
+
+// 287, 460, 000, 000
+const diameter = 287_460_000_000;
+
+// Numeric separators are simply underscores
+// that we can place anywhere that we want in
+// or numbers,
+// and which will make it really easy to understand
+// and to parse numbers this large.
+// Using the underscore here as a thousand separator,
+// then makes it really easy to understand,
+// that this number here
+// means in fact, 287 billion.
+
+// Now let's just log it to the console
+// to see what JavaScript actually sees.
+// And so here we see that in fact,
+// the engine basically ignores these underscores.
+// So these numeric separators.
+// It simply sees the number itself.
+// And so what this means,
+// is that we can actually place the underscores,
+// the numeric separators, anywhere that we want.
+console.log(diameter);
+
+const price = 345_99;
+console.log(price);
+
+const transferFee1 = 15_00;
+const transferFee2 = 1_500;
+
+// And this one is to show you some restrictions
+// as to where we can place the underscore.
+// PI is,
+// 3.1415,
+// and we can only place underscores between numbers.
+
+const PI = 3.1415;
+console.log(PI);
+
+// And now just one final detail that we need to be aware of
+// is that when we try to convert strings,
+// that contain underscores,
+// to a number that will not work as expected.
+
+console.log(Number('230000'));
+
+// However, if we place an underscore here,
+// so if we want to have a numeric separator here,
+// that would not work.
+// Now it is not a number.
+// What that means,
+// is that you should really only use,
+// these numeric separators,
+// when you are writing down numbers like this.
+
+// Really in the code.
+console.log(Number('230_000'));
+
+// f you need to store a number in a string,
+// for example, in an API,
+// or if you get a number as a string from an API,
+// you should not use underscores in there,
+// because then JavaScript will not be able
+// to parse the number correctly out of that string.
+// It's not gonna work as expected
+// and you will get it's not a number,
+// that might then introduce bugs into your application.
+
+console.log(parseInt('230_000'));
+// And the same is true with the "parseInt" function.
+// Here we do not get not a number,
+// but we only get to 230.
+// Only the parts that is here in front of the underscore.
+// Everything else will then be ignored.
