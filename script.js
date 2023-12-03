@@ -448,117 +448,146 @@ btnSort.addEventListener('click', function (e) {
 // Math and Rounding
 ////////////////////////////////////////////////////////////////
 
-// Let's now learn
-// about some more mathematical operations
-// and also about rounding numbers.
-// And we have already been using
-// lots of mathematical operations,
+// // Let's now learn
+// // about some more mathematical operations
+// // and also about rounding numbers.
+// // And we have already been using
+// // lots of mathematical operations,
 
-// for example plus, minus, times, divided,
-// exponentiation and so on.
-// And so we don't need to go over these again.
+// // for example plus, minus, times, divided,
+// // exponentiation and so on.
+// // And so we don't need to go over these again.
 
-// So let's start here with the square root.
-// And so just like many other functions
-// the square root is part of the math namespace.
-// So Math.sqrt, so this stands for square root.
-console.log(Math.sqrt(25));
-// And so all we need to do, is to pass in the number
-// and then it will give us the square root.
-// And the same could be achieved
-// using the exponentiation operator as well
-// by doing one divided by two.
-// And so that two is the square.
-// So we want the square root.
-// So we use one divided by two,
-// and actually we have to put this into parenthesis
-// and now it works, all right?
-console.log(25 ** (1 / 2));
+// // So let's start here with the square root.
+// // And so just like many other functions
+// // the square root is part of the math namespace.
+// // So Math.sqrt, so this stands for square root.
+// console.log(Math.sqrt(25));
+// // And so all we need to do, is to pass in the number
+// // and then it will give us the square root.
+// // And the same could be achieved
+// // using the exponentiation operator as well
+// // by doing one divided by two.
+// // And so that two is the square.
+// // So we want the square root.
+// // So we use one divided by two,
+// // and actually we have to put this into parenthesis
+// // and now it works, all right?
+// console.log(25 ** (1 / 2));
 
-// And the same would work for a cubic root
-// for example of eight, which would be two.
-// And so actually this is I think the only way
-// you could calculate a cubic root if you need it.
-console.log(8 ** (1 / 3));
+// // And the same would work for a cubic root
+// // for example of eight, which would be two.
+// // And so actually this is I think the only way
+// // you could calculate a cubic root if you need it.
+// console.log(8 ** (1 / 3));
 
-console.log(Math.max(5, 18, 23, 11, 2));
-console.log(Math.max(5, 18, '23', 11, 2));
-console.log(Math.max(5, 18, '23px', 11, 2));
+// console.log(Math.max(5, 18, 23, 11, 2));
+// console.log(Math.max(5, 18, '23', 11, 2));
+// console.log(Math.max(5, 18, '23px', 11, 2));
 
-console.log(Math.min(5, 18, '23px', 11, 2));
-console.log(Math.min(5, 18, 23, 11, 2));
+// console.log(Math.min(5, 18, '23px', 11, 2));
+// console.log(Math.min(5, 18, 23, 11, 2));
 
-// if we wanted to calculate the radius of a circle
-// with 10 pixels, we could do that.
-console.log(Math.PI * Number.parseFloat('10px') ** 2);
+// // if we wanted to calculate the radius of a circle
+// // with 10 pixels, we could do that.
+// console.log(Math.PI * Number.parseFloat('10px') ** 2);
 
-console.log(Math.trunc(Math.random() * 6) + 1);
+// console.log(Math.trunc(Math.random() * 6) + 1);
 
-const randomInt = (min, max) =>
-  Math.trunc(Math.random() * (max - min) + 1) + min;
-// 0...1 -> 0...(max - min) -> min...max
-console.log(randomInt(10, 20));
+// const randomInt = (min, max) =>
+//   Math.trunc(Math.random() * (max - min) + 1) + min;
+// // 0...1 -> 0...(max - min) -> min...max
+// console.log(randomInt(10, 20));
 
-//Rounding integers
-// So again, this one simply removes any decimal part always,
-console.log(Math.trunc(23.3));
+// //Rounding integers
+// // So again, this one simply removes any decimal part always,
+// console.log(Math.trunc(23.3));
 
-// ut we have also other ways.
-// So we also have round, so math.round.
-// And so this one will always round to the nearest integer.
-console.log(Math.round(23.3));
-console.log(Math.round(23.9));
+// // ut we have also other ways.
+// // So we also have round, so math.round.
+// // And so this one will always round to the nearest integer.
+// console.log(Math.round(23.3));
+// console.log(Math.round(23.9));
 
-console.log(Math.ceil(23.3));
-console.log(Math.ceil(23.9));
+// console.log(Math.ceil(23.3));
+// console.log(Math.ceil(23.9));
 
-console.log(Math.floor(23.3));
-console.log(Math.floor(23.9));
+// console.log(Math.floor(23.3));
+// console.log(Math.floor(23.9));
 
-// And by the way, all of these methods,
-// they also do type coercion.
+// // And by the way, all of these methods,
+// // they also do type coercion.
 
-// So basically floor and trunc, both cut off the decimal part
-// when we are dealing with positive numbers.
-console.log(Math.trunc(23.3));
+// // So basically floor and trunc, both cut off the decimal part
+// // when we are dealing with positive numbers.
+// console.log(Math.trunc(23.3));
 
-// However, for negative numbers, it doesn't work this way.
-// but floor now gets rounded to minus 24.
-// Because with negative numbers,
-// rounding works the other way around.
-// And so actually a floor is a little bit better than trunc
-// because it works in all situations,
-// // no matter if we're dealing with positive
-// or negative numbers.
-console.log(Math.trunc(-23.3));
-console.log(Math.floor(-23.3)); //Because with negative numbers, rounding works the other way around.
+// // However, for negative numbers, it doesn't work this way.
+// // but floor now gets rounded to minus 24.
+// // Because with negative numbers,
+// // rounding works the other way around.
+// // And so actually a floor is a little bit better than trunc
+// // because it works in all situations,
+// // // no matter if we're dealing with positive
+// // or negative numbers.
+// console.log(Math.trunc(-23.3));
+// console.log(Math.floor(-23.3)); //Because with negative numbers, rounding works the other way around.
 
-const randomInt2 = (min, max) =>
-  Math.floor(Math.random() * (max - min) + 1) + min;
-// 0...1 -> 0...(max - min) -> min...max
-console.log(randomInt2(10, 20));
+// const randomInt2 = (min, max) =>
+//   Math.floor(Math.random() * (max - min) + 1) + min;
+// // 0...1 -> 0...(max - min) -> min...max
+// console.log(randomInt2(10, 20));
 
-/// Rounding decimals
+// /// Rounding decimals
 
-// So with decimals it works differently
-// than with integers and debts.
-// Once again, because things in JavaScript
-// evolved kind of in a weird way in this kind of old language.
-// And if the language was designed today
-// and definitely this would be very different
-// but now this is what we have to work with right now, okay?
-console.log((2.7).toFixed(0)); // always return to string
-console.log((2.7).toFixed(3)); // always return to string
-console.log((2.345).toFixed(2)); // always return to string
+// // So with decimals it works differently
+// // than with integers and debts.
+// // Once again, because things in JavaScript
+// // evolved kind of in a weird way in this kind of old language.
+// // And if the language was designed today
+// // and definitely this would be very different
+// // but now this is what we have to work with right now, okay?
+// console.log((2.7).toFixed(0)); // always return to string
+// console.log((2.7).toFixed(3)); // always return to string
+// console.log((2.345).toFixed(2)); // always return to string
 
-console.log(+(2.345).toFixed(2)); // to convert a number
+// console.log(+(2.345).toFixed(2)); // to convert a number
 
-// Does this here works
-// in a similar way than the string methods?
-// So this is a number, so it's a primitive, right?
-// And primitives actually don't have methods.
-// And so behind the scenes, JavaScript will do boxing.
-// And boxing is to basically transform this
-// to a number object, then call the method on that object.
-// And then once the operation is finished
-// it will convert it back to a primitive, okay?
+// // Does this here works
+// // in a similar way than the string methods?
+// // So this is a number, so it's a primitive, right?
+// // And primitives actually don't have methods.
+// // And so behind the scenes, JavaScript will do boxing.
+// // And boxing is to basically transform this
+// // to a number object, then call the method on that object.
+// // And then once the operation is finished
+// // it will convert it back to a primitive, okay?
+
+//////////////////////////////////////////////////////////////
+// The Remainder Operator
+//////////////////////////////////////////////////////////////
+
+console.log(5 % 2);
+console.log(5 / 2); //5  = 2 * 2 + 1
+
+console.log(8 % 3);
+console.log(8 / 3); //8  = 2 * 3 + 2
+
+//reminder
+console.log(6 % 2);
+console.log(6 / 2);
+
+const isEven = n => n % 2 === 0;
+console.log(isEven(8));
+console.log(isEven(23));
+console.log(isEven(514));
+
+labelBalance.addEventListener('click', function () {
+  [...document.querySelectorAll('.movements__row')].forEach(function (row, i) {
+    //every 2nd row
+    if (i % 2 === 0) row.style.backgroundColor = 'orangered';
+
+    //every 3rd row
+    if (i % 3 === 0) row.style.backgroundColor = 'blue';
+  });
+});
