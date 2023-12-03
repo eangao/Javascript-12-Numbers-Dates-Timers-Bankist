@@ -81,7 +81,7 @@ const inputClosePin = document.querySelector('.form__input--pin');
 /////////////////////////////////////////////////
 // Functions
 
-const formatMovementDate = function (date) {
+const formatMovementDate = function (date, locale) {
   const calcDaysPassed = (date1, date2) =>
     Math.round(Math.abs(date2 - date1) / (1000 * 60 * 60 * 24));
 
@@ -92,10 +92,15 @@ const formatMovementDate = function (date) {
   if (daysPassed === 1) return 'Yesterday';
   if (daysPassed <= 7) return `${daysPassed} days ago`;
 
-  const day = `${date.getDate()}`.padStart(2, 0);
-  const month = `${date.getMonth() + 1}`.padStart(2, 0);
-  const year = date.getFullYear();
-  return `${day}/${month}/${year}`;
+  // const day = `${date.getDate()}`.padStart(2, 0);
+  // const month = `${date.getMonth() + 1}`.padStart(2, 0);
+  // const year = date.getFullYear();
+  // return `${day}/${month}/${year}`;
+
+  return new Intl.DateTimeFormat(locale).format(date);
+
+  // docs
+  // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl
 };
 
 const displayMovements = function (acc, sort = false) {
@@ -118,7 +123,7 @@ const displayMovements = function (acc, sort = false) {
     // to also get the data from some other array.
     const date = new Date(acc.movementsDates[i]);
 
-    const displayDate = formatMovementDate(date);
+    const displayDate = formatMovementDate(date, acc.locale);
 
     const html = `
       <div class="movements__row">
@@ -187,10 +192,35 @@ const updateUI = function (acc) {
 // Event handlers
 let currentAccount;
 
-// // FAKE ALWAYS LOGGED IN
-// currentAccount = account1;
-// updateUI(currentAccount);
-// containerApp.style.opacity = 100;
+// FAKE ALWAYS LOGGED IN
+currentAccount = account1;
+updateUI(currentAccount);
+containerApp.style.opacity = 100;
+
+// //  Experiment of API
+// const now = new Date();
+// const options = {
+//   hour: 'numeric',
+//   minute: 'numeric',
+//   day: 'numeric',
+//   // month: 'numeric',
+//   // month: '2-digit',
+//   month: 'long',
+//   // year: '2-digit',
+//   year: 'numeric',
+//   // weekday: 'short',
+//   // weekday: 'narrow',
+//   weekday: 'long',
+// };
+
+//get the local in the browser
+// const local = navigator.language;
+// console.log(local);
+
+// labelDate.textContent = new Intl.DateTimeFormat(local, options).format(now);
+
+// // ISO Language Code Table
+// // http://www.lingoes.net/en/translator/langcode.htm
 
 btnLogin.addEventListener('click', function (e) {
   // Prevent form from submitting
@@ -210,13 +240,39 @@ btnLogin.addEventListener('click', function (e) {
 
     //create current date and time
     const now = new Date();
-    const day = `${now.getDate()}`.padStart(2, 0);
-    const month = `${now.getMonth() + 1}`.padStart(2, 0);
-    const year = now.getFullYear();
-    const hour = `${now.getHours()}`.padStart(2, 0);
-    const min = `${now.getMinutes()}`.padStart(2, 0);
-    labelDate.textContent = `${day}/${month}/${year}, ${hour}:${min}`;
-    // day/month/year
+    // const day = `${now.getDate()}`.padStart(2, 0);
+    // const month = `${now.getMonth() + 1}`.padStart(2, 0);
+    // const year = now.getFullYear();
+    // const hour = `${now.getHours()}`.padStart(2, 0);
+    // const min = `${now.getMinutes()}`.padStart(2, 0);
+    // labelDate.textContent = `${day}/${month}/${year}, ${hour}:${min}`;
+    // // day/month/year
+
+    const options = {
+      hour: 'numeric',
+      minute: 'numeric',
+      day: 'numeric',
+      month: 'numeric',
+      // month: '2-digit',
+      // month: 'long',
+      // year: '2-digit',
+      year: 'numeric',
+      // weekday: 'short',
+      // weekday: 'narrow',
+      // weekday: 'long',
+    };
+
+    //get the local in the browser
+    // const locale = navigator.language;
+    // console.log(local);
+
+    labelDate.textContent = new Intl.DateTimeFormat(
+      currentAccount.locale,
+      options
+    ).format(now);
+
+    // ISO Language Code Table
+    // http://www.lingoes.net/en/translator/langcode.htm
 
     // Clear input fields
     inputLoginUsername.value = inputLoginPin.value = '';
@@ -1203,74 +1259,97 @@ btnSort.addEventListener('click', function (e) {
 // Operations With Dates
 //////////////////////////////////////////////////////////////////
 
-// Let's now perform some operations with dates.
-// So one cool thing that we can do with dates
-// is to do calculations with them.
+// // Let's now perform some operations with dates.
+// // So one cool thing that we can do with dates
+// // is to do calculations with them.
 
-// For example, we can subtract one date
-// from another date,
-// in order to calculate how many days have passed
-// between the two dates.
+// // For example, we can subtract one date
+// // from another date,
+// // in order to calculate how many days have passed
+// // between the two dates.
 
-// And this works,
-// because whenever we attempt to convert a date
-// to a number, then the result is going to be the
-// timestamp in milliseconds.
-// And with these milliseconds,
-// we can then perform calculations.
-// So again, the timestamps are going to be really helpful here
-// in this situation.
+// // And this works,
+// // because whenever we attempt to convert a date
+// // to a number, then the result is going to be the
+// // timestamp in milliseconds.
+// // And with these milliseconds,
+// // we can then perform calculations.
+// // So again, the timestamps are going to be really helpful here
+// // in this situation.
 
-const future = new Date(2037, 10, 19, 15, 23);
-console.log(future);
-console.log(+future);
+// const future = new Date(2037, 10, 19, 15, 23);
+// console.log(future);
+// console.log(+future);
 
-// o if we subtract one date from another,
-// the result is going to be a number like this.
-// So a timestamp in milliseconds.
-// And then we can simply convert
-// these milliseconds back to Days,
-// or two hours,
-// or to whatever we really want.
-// So let's actually now create a
+// // o if we subtract one date from another,
+// // the result is going to be a number like this.
+// // So a timestamp in milliseconds.
+// // And then we can simply convert
+// // these milliseconds back to Days,
+// // or two hours,
+// // or to whatever we really want.
+// // So let's actually now create a
 
-const calcDaysPassed = (date1, date2) =>
-  Math.abs((date2 - date1) / (1000 * 60 * 60 * 24));
+// const calcDaysPassed = (date1, date2) =>
+//   Math.abs((date2 - date1) / (1000 * 60 * 60 * 24));
 
-// Alright, and so this gives us these milliseconds.
-// And so now we just need to convert them.
-// And this is similar to what we did,
-// I think in one of the previous lectures.
-// So we want to divide by 1000.
-// And so this converts milliseconds to seconds,
-// then that times 60,
-// to convert it to minutes,
-// then times 60 to convert it to hours,
-// and then times 24,
-// which converts it to days.
-// And again, that's because there are 24 hours in a day.
-// There are 60 minutes in one hour,
-// 60 seconds in one minute,
-// and 1000 milliseconds in one second.
-// And so now we get 10 days.
-// And that makes sense.
+// // Alright, and so this gives us these milliseconds.
+// // And so now we just need to convert them.
+// // And this is similar to what we did,
+// // I think in one of the previous lectures.
+// // So we want to divide by 1000.
+// // And so this converts milliseconds to seconds,
+// // then that times 60,
+// // to convert it to minutes,
+// // then times 60 to convert it to hours,
+// // and then times 24,
+// // which converts it to days.
+// // And again, that's because there are 24 hours in a day.
+// // There are 60 minutes in one hour,
+// // 60 seconds in one minute,
+// // and 1000 milliseconds in one second.
+// // And so now we get 10 days.
+// // And that makes sense.
 
-const days1 = calcDaysPassed(new Date(2037, 3, 14), new Date(2037, 3, 4));
-console.log(days1);
+// const days1 = calcDaysPassed(new Date(2037, 3, 14), new Date(2037, 3, 4));
+// console.log(days1);
 
-// So this works just really nice.
-// Now if you need really pretty sighs calculations,
-// for example, including time changes due
-// to daylight saving changes,
-// and other weird edge cases like that,
-// then you should use a date library like moment dot js.
-// And that's a library
-// that's available for free for all JavaScript developers.
+// // So this works just really nice.
+// // Now if you need really pretty sighs calculations,
+// // for example, including time changes due
+// // to daylight saving changes,
+// // and other weird edge cases like that,
+// // then you should use a date library like moment dot js.
+// // And that's a library
+// // that's available for free for all JavaScript developers.
 
-// So we might not want that.
-// And in this case,
-// we can simply use math dot round on all of this.
-// const days1 = calcDaysPassed(
-//   new Date(2037, 3, 14, 8, 6),
-//   new Date(2037, 3, 4, 10, 3)
-// );
+// // So we might not want that.
+// // And in this case,
+// // we can simply use math dot round on all of this.
+// // const days1 = calcDaysPassed(
+// //   new Date(2037, 3, 14, 8, 6),
+// //   new Date(2037, 3, 4, 10, 3)
+// // );
+
+//////////////////////////////////////////////////////////////////
+// Internationalizing Dates (Intl)
+//////////////////////////////////////////////////////////////////
+// So JavaScript
+// has a new Internationalization API.
+// Now that sounds very fancy,
+// but all it does is to allow us
+// to easily format numbers and strings
+// according to different languages.
+
+// So with this new API,
+// we can make our applications support different languages
+// for users around the world
+// which is pretty important.
+
+// For example, currencies or dates are represented
+// in a completely different way in Europe
+// or in the U.S or in Asia for example.
+// Now there is a lot of language specific things
+// that we can do with the Internationalization API.
+// But in this section, we're just briefly gonna talk about
+// formatting dates and numbers.
