@@ -202,14 +202,62 @@ const updateUI = function (acc) {
   calcDisplaySummary(acc);
 };
 
+const startLogOutTimer = function () {
+  const tick = function () {
+    const min = String(Math.trunc(time / 60)).padStart(2, 0); // minute
+    const sec = String(time % 60).padStart(2, 0);
+
+    //In each call, print the remaining time to UI
+    labelTimer.textContent = `${min}:${sec}`;
+
+    // When 0 second, stop timer and log out user
+    if (time === 0) {
+      clearInterval(timer);
+
+      labelWelcome.textContent = 'Log in to get started';
+
+      containerApp.style.opacity = 0;
+    }
+
+    // Decrease 1 second
+    time--;
+  };
+
+  //Set time to 5 minutes
+  let time = 30; //second
+
+  //   So you'll see it before, it was still at one second.
+  // So it was the value that we had before.
+  // And that happened because this entire function here
+  // is only first executed after one second.
+  // Right?
+
+  // So this callback function that we passed into set interval
+  // is not called immediately.
+  // It will only get called the first time after one second.
+  // But in fact,
+  // we want to call this function also immediately.
+
+  // Call the timer every second
+  tick();
+  const timer = setInterval(tick, 1000);
+
+  //   So here, we will return to timer
+  // and that's important because to clear the timer,
+  // so to use the clear interval function,
+  // we need the timer variable.
+
+  return timer;
+};
+
 ///////////////////////////////////////
 // Event handlers
-let currentAccount;
+let currentAccount, timer;
 
 // FAKE ALWAYS LOGGED IN
-currentAccount = account1;
-updateUI(currentAccount);
-containerApp.style.opacity = 100;
+// currentAccount = account1;
+// updateUI(currentAccount);
+// containerApp.style.opacity = 100;
 
 // //  Experiment of API
 // const now = new Date();
@@ -292,6 +340,10 @@ btnLogin.addEventListener('click', function (e) {
     inputLoginUsername.value = inputLoginPin.value = '';
     inputLoginPin.blur();
 
+    //Timer
+    if (timer) clearInterval(timer);
+    timer = startLogOutTimer();
+
     // Update UI
     updateUI(currentAccount);
   }
@@ -323,6 +375,16 @@ btnTransfer.addEventListener('click', function (e) {
 
     // Update UI
     updateUI(currentAccount);
+
+    //Reset timer
+
+    //     whenever the user does a transfer or requests a loan.
+    // So these are the only two activities
+    // that exist in our application.
+    // And so these operations should always trigger the timer
+    // to be reset.
+    clearInterval(timer);
+    timer = startLogOutTimer();
   }
 });
 
@@ -348,6 +410,10 @@ btnLoan.addEventListener('click', function (e) {
 
       // Update UI
       updateUI(currentAccount);
+
+      //Reset timer
+      clearInterval(timer);
+      timer = startLogOutTimer();
     }, 2500);
   }
   inputLoanAmount.value = '';
@@ -1402,118 +1468,128 @@ btnSort.addEventListener('click', function (e) {
 //////////////////////////////////////////////////////////////////////
 // Timers: setTimeout and setInterval
 //////////////////////////////////////////////////////////////////////
-// To finish the section,
-// let's quickly talk about timers in JavaScript.
-// And we have two kinds of timers.
+// // To finish the section,
+// // let's quickly talk about timers in JavaScript.
+// // And we have two kinds of timers.
 
-// First, the set timeout timer runs just once,
-// after a defined time,
+// // First, the set timeout timer runs just once,
+// // after a defined time,
 
-// while the set interval timer
-// keeps running basically forever, until we stop it.
-// So basically, we can use set timeout to execute some code
-// at some point in the future.
+// // while the set interval timer
+// // keeps running basically forever, until we stop it.
+// // So basically, we can use set timeout to execute some code
+// // at some point in the future.
 
-// So here, we pass in the amount of milliseconds,
-// that will pass until this function is called.
-// So let's say we want to call this function
-// after three seconds and so we need to pass 3000.
-// So one second is 1000 milliseconds.
-// And so this is basically three times 1000.
+// // So here, we pass in the amount of milliseconds,
+// // that will pass until this function is called.
+// // So let's say we want to call this function
+// // after three seconds and so we need to pass 3000.
+// // So one second is 1000 milliseconds.
+// // And so this is basically three times 1000.
 
-// we really delayed calling this function here, right?
-// Yeah, by exactly three seconds.
+// // we really delayed calling this function here, right?
+// // Yeah, by exactly three seconds.
 
-// And we can also say that we schedule this function call
-// for three seconds later, all right.
+// // And we can also say that we schedule this function call
+// // for three seconds later, all right.
 
-// setTimeOut
-setTimeout(() => console.log('Here is your pizza 🍕'), 3000);
+// // setTimeOut
+// setTimeout(() => console.log('Here is your pizza 🍕'), 3000);
 
-// Now, what's really important to realize here
-// is that the code execution does not stop here at this point.
-// All right, so when the execution of our code
-// reaches this point, it will simply call
-// the set timeout function,
-// it will then essentially register
-// this callback function here to be called later.
-// And then the code execution simply continues.
-// And we can prove that by doing something
-// after the set timeout.
+// // Now, what's really important to realize here
+// // is that the code execution does not stop here at this point.
+// // All right, so when the execution of our code
+// // reaches this point, it will simply call
+// // the set timeout function,
+// // it will then essentially register
+// // this callback function here to be called later.
+// // And then the code execution simply continues.
+// // And we can prove that by doing something
+// // after the set timeout.
 
-console.log('Waiting...');
+// console.log('Waiting...');
 
-// So again, as soon as JavaScript hits this line of code here,
-// it will simply basically keep counting the time
-// in the background, and register this callback function
-// to be called after that time has elapsed,
-// and then immediately, JavaScript will move on
-// to the next line, which is this one, all right.
-// And this mechanism is called Asynchronous JavaScript.
-// And we will talk about how exactly all of this works
-// behind the scenes in a special section
-// just about Asynchronous JavaScript.
+// // So again, as soon as JavaScript hits this line of code here,
+// // it will simply basically keep counting the time
+// // in the background, and register this callback function
+// // to be called after that time has elapsed,
+// // and then immediately, JavaScript will move on
+// // to the next line, which is this one, all right.
+// // And this mechanism is called Asynchronous JavaScript.
+// // And we will talk about how exactly all of this works
+// // behind the scenes in a special section
+// // just about Asynchronous JavaScript.
 
-// Okay, but anyway, what if we now needed to pass
-// some arguments into this function here?
-// It's not that simple, right?
-// Because we are not calling this function ourselves.
-// So we are not using the parenthesis like this
-// and so therefore, we cannot pass in any arguments
-// into the function.
+// // Okay, but anyway, what if we now needed to pass
+// // some arguments into this function here?
+// // It's not that simple, right?
+// // Because we are not calling this function ourselves.
+// // So we are not using the parenthesis like this
+// // and so therefore, we cannot pass in any arguments
+// // into the function.
 
-// All right, now, however, the D set timeout function here
-// actually has a solution for that.
-// And it works like this
-// so basically, all the arguments here that we pass
-// after the delay will be arguments to the function.
+// // All right, now, however, the D set timeout function here
+// // actually has a solution for that.
+// // And it works like this
+// // so basically, all the arguments here that we pass
+// // after the delay will be arguments to the function.
 
-setTimeout(
-  (ing1, ing2) => console.log(`Here is your pizza with ${ing1} and ${ing2} 🍕`),
-  3000,
-  'olives',
-  'spinach'
-);
+// setTimeout(
+//   (ing1, ing2) => console.log(`Here is your pizza with ${ing1} and ${ing2} 🍕`),
+//   3000,
+//   'olives',
+//   'spinach'
+// );
 
-console.log('Waiting...');
+// console.log('Waiting...');
 
-// which is the fact that we can actually cancel the timer,
-// at least until the delay has actually passed.
+// // which is the fact that we can actually cancel the timer,
+// // at least until the delay has actually passed.
 
-const ingredients = ['olives', 'spinach'];
+// const ingredients = ['olives', 'spinach'];
 
-const pizzaTimer = setTimeout(
-  (ing1, ing2) => console.log(`Here is your pizza with ${ing1} and ${ing2} 🍕`),
-  3000,
-  ...ingredients
-);
+// const pizzaTimer = setTimeout(
+//   (ing1, ing2) => console.log(`Here is your pizza with ${ing1} and ${ing2} 🍕`),
+//   3000,
+//   ...ingredients
+// );
 
-console.log('Waiting...');
+// console.log('Waiting...');
 
-// So again, here, we basically stored the result
-// of the set timeout function,
-// which is essentially the timer.
-// And then we can use that variable to clear the timeout.
-// And then we can use that variable
-// to basically delete the timer.
-// And for that, we use clear timeout.
-// And so now since this array contains this spinach here,
-// now you will not see the pizza string here
-if (ingredients.includes('spinach')) clearTimeout(pizzaTimer);
+// // So again, here, we basically stored the result
+// // of the set timeout function,
+// // which is essentially the timer.
+// // And then we can use that variable to clear the timeout.
+// // And then we can use that variable
+// // to basically delete the timer.
+// // And for that, we use clear timeout.
+// // And so now since this array contains this spinach here,
+// // now you will not see the pizza string here
+// if (ingredients.includes('spinach')) clearTimeout(pizzaTimer);
 
-// setInterval
+// // setInterval
 
-// because we also need to talk about set interval.
-// So we learned that set timeout here,
-// simply schedules a function to run after
-// a certain amount of time,
-// but the callback function is only executed once.
+// // because we also need to talk about set interval.
+// // So we learned that set timeout here,
+// // simply schedules a function to run after
+// // a certain amount of time,
+// // but the callback function is only executed once.
 
-// Now, what if we wanted to run a function
-// over and over again, like every five seconds,
-// or every 10 minutes?
+// // Now, what if we wanted to run a function
+// // over and over again, like every five seconds,
+// // or every 10 minutes?
 
-setInterval(function () {
-  const now = new Date();
-  console.log(now);
-}, 1000);
+// setInterval(function () {
+//   const now = new Date();
+//   console.log(now);
+// }, 1000);
+
+////////////////////////////////////////////////////////////////
+// Implementing a Countdown Timer
+////////////////////////////////////////////////////////////////
+
+// Now for security reasons, real bank applications
+// will log out users after some inactive time.
+// For example, after five minutes without doing anything.
+// And that's what we will implement in this video
+// using the set interval timer.
