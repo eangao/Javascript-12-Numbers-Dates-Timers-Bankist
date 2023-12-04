@@ -86,7 +86,7 @@ const formatMovementDate = function (date, locale) {
     Math.round(Math.abs(date2 - date1) / (1000 * 60 * 60 * 24));
 
   const daysPassed = calcDaysPassed(new Date(), date);
-  console.log(daysPassed);
+  // console.log(daysPassed);
 
   if (daysPassed === 0) return 'Today';
   if (daysPassed === 1) return 'Yesterday';
@@ -332,16 +332,23 @@ btnLoan.addEventListener('click', function (e) {
   const amount = Math.floor(+inputLoanAmount.value);
 
   if (amount > 0 && currentAccount.movements.some(mov => mov >= amount * 0.1)) {
-    // Add movement
-    currentAccount.movements.push(amount);
+    //     But typically, a bank takes some time,
+    // like some days or some weeks to approve that loan.
+    // And so let's simulate that here
+    // by taking like two or three seconds.
+    // So what happens when we successfully request a loan
+    setTimeout(function () {
+      // Add movement
+      currentAccount.movements.push(amount);
 
-    //add loan date
-    //So JavaScript will then automatically convert this data here
-    // into a nicely formatted string.
-    currentAccount.movementsDates.push(new Date().toISOString());
+      //add loan date
+      //So JavaScript will then automatically convert this data here
+      // into a nicely formatted string.
+      currentAccount.movementsDates.push(new Date().toISOString());
 
-    // Update UI
-    updateUI(currentAccount);
+      // Update UI
+      updateUI(currentAccount);
+    }, 2500);
   }
   inputLoanAmount.value = '';
 });
@@ -356,7 +363,7 @@ btnClose.addEventListener('click', function (e) {
     const index = accounts.findIndex(
       acc => acc.username === currentAccount.username
     );
-    console.log(index);
+    // console.log(index);
     // .indexOf(23)
 
     // Delete account
@@ -1372,22 +1379,141 @@ btnSort.addEventListener('click', function (e) {
 // Internationalizing Numbers (Intl)
 ///////////////////////////////////////////////////////////////////////
 
-const num = 3884764.23;
+// const num = 3884764.23;
 
-const options = {
-  // style: 'unit',
-  // style: 'percent',
-  style: 'currency',
-  currency: 'EUR',
-  // unit: 'mile-per-hour',
-  unit: 'celsius',
-  // userGrouping: false,
-};
+// const options = {
+//   // style: 'unit',
+//   // style: 'percent',
+//   style: 'currency',
+//   currency: 'EUR',
+//   // unit: 'mile-per-hour',
+//   unit: 'celsius',
+//   // userGrouping: false,
+// };
 
-console.log('US: ', new Intl.NumberFormat('en-US', options).format(num));
-console.log('Germany: ', new Intl.NumberFormat('de-DE', options).format(num));
-console.log('Syria: ', new Intl.NumberFormat('ar-SY', options).format(num));
-console.log(
-  'Browser: ',
-  new Intl.NumberFormat(navigator.language, options).format(num)
+// console.log('US: ', new Intl.NumberFormat('en-US', options).format(num));
+// console.log('Germany: ', new Intl.NumberFormat('de-DE', options).format(num));
+// console.log('Syria: ', new Intl.NumberFormat('ar-SY', options).format(num));
+// console.log(
+//   'Browser: ',
+//   new Intl.NumberFormat(navigator.language, options).format(num)
+// );
+
+//////////////////////////////////////////////////////////////////////
+// Timers: setTimeout and setInterval
+//////////////////////////////////////////////////////////////////////
+// To finish the section,
+// let's quickly talk about timers in JavaScript.
+// And we have two kinds of timers.
+
+// First, the set timeout timer runs just once,
+// after a defined time,
+
+// while the set interval timer
+// keeps running basically forever, until we stop it.
+// So basically, we can use set timeout to execute some code
+// at some point in the future.
+
+// So here, we pass in the amount of milliseconds,
+// that will pass until this function is called.
+// So let's say we want to call this function
+// after three seconds and so we need to pass 3000.
+// So one second is 1000 milliseconds.
+// And so this is basically three times 1000.
+
+// we really delayed calling this function here, right?
+// Yeah, by exactly three seconds.
+
+// And we can also say that we schedule this function call
+// for three seconds later, all right.
+
+// setTimeOut
+setTimeout(() => console.log('Here is your pizza 🍕'), 3000);
+
+// Now, what's really important to realize here
+// is that the code execution does not stop here at this point.
+// All right, so when the execution of our code
+// reaches this point, it will simply call
+// the set timeout function,
+// it will then essentially register
+// this callback function here to be called later.
+// And then the code execution simply continues.
+// And we can prove that by doing something
+// after the set timeout.
+
+console.log('Waiting...');
+
+// So again, as soon as JavaScript hits this line of code here,
+// it will simply basically keep counting the time
+// in the background, and register this callback function
+// to be called after that time has elapsed,
+// and then immediately, JavaScript will move on
+// to the next line, which is this one, all right.
+// And this mechanism is called Asynchronous JavaScript.
+// And we will talk about how exactly all of this works
+// behind the scenes in a special section
+// just about Asynchronous JavaScript.
+
+// Okay, but anyway, what if we now needed to pass
+// some arguments into this function here?
+// It's not that simple, right?
+// Because we are not calling this function ourselves.
+// So we are not using the parenthesis like this
+// and so therefore, we cannot pass in any arguments
+// into the function.
+
+// All right, now, however, the D set timeout function here
+// actually has a solution for that.
+// And it works like this
+// so basically, all the arguments here that we pass
+// after the delay will be arguments to the function.
+
+setTimeout(
+  (ing1, ing2) => console.log(`Here is your pizza with ${ing1} and ${ing2} 🍕`),
+  3000,
+  'olives',
+  'spinach'
 );
+
+console.log('Waiting...');
+
+// which is the fact that we can actually cancel the timer,
+// at least until the delay has actually passed.
+
+const ingredients = ['olives', 'spinach'];
+
+const pizzaTimer = setTimeout(
+  (ing1, ing2) => console.log(`Here is your pizza with ${ing1} and ${ing2} 🍕`),
+  3000,
+  ...ingredients
+);
+
+console.log('Waiting...');
+
+// So again, here, we basically stored the result
+// of the set timeout function,
+// which is essentially the timer.
+// And then we can use that variable to clear the timeout.
+// And then we can use that variable
+// to basically delete the timer.
+// And for that, we use clear timeout.
+// And so now since this array contains this spinach here,
+// now you will not see the pizza string here
+if (ingredients.includes('spinach')) clearTimeout(pizzaTimer);
+
+// setInterval
+
+// because we also need to talk about set interval.
+// So we learned that set timeout here,
+// simply schedules a function to run after
+// a certain amount of time,
+// but the callback function is only executed once.
+
+// Now, what if we wanted to run a function
+// over and over again, like every five seconds,
+// or every 10 minutes?
+
+setInterval(function () {
+  const now = new Date();
+  console.log(now);
+}, 1000);
